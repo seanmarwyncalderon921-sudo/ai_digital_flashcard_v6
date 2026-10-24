@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SAPC AI Academic Reviewer | San Antonio de Padua College</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=20261025-v2" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="light-theme consent-required auth-active">
+
+  <!-- STANDALONE LOGIN PAGE VIEW -->
+  <section id="auth-screen" class="auth-page">
+    <div class="auth-panel">
+      <div class="auth-brand">
+        <img src="logo.jpg" alt="SAPC Logo" class="auth-logo" onerror="this.src='https://sapc.edu.ph/favicon.ico'; this.onerror=null;" />
+        <h2>San Antonio de Padua College</h2>
+      </div>
+      
+      <p class="auth-eyebrow">Student Portal</p>
+      <h1 id="auth-title">Welcome Paduan</h1>
+      <p class="auth-intro">Sign in to access your AI flashcard reviewer workspace.</p>
+
+      <form id="auth-form" class="auth-form">
+        <input type="text" id="auth-username" placeholder="Username or Email" required />
+        <input type="password" id="auth-password" placeholder="Password" required />
+
+        <p id="auth-error" class="auth-error hidden" role="alert"></p>
+
+        <div class="auth-actions">
+          <button type="submit" id="auth-submit-btn" class="primary-btn">Log In</button>
+          <button type="button" id="auth-switch-btn" class="ghost">Register</button>
+        </div>
+      </form>
+
+      <div class="auth-divider">
+        <span>OR</span>
+      </div>
+
+      <div id="g_id_onload"
+           data-client_id="831508871993-j7egn200ai4uvbqabkuka6s66juaikes.apps.googleusercontent.com"
+           data-callback="handleGoogleSignIn"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="rectangular"
+           data-theme="outline"
+           data-text="sign_in_with"
+           data-size="large"
+           data-logo_alignment="left">
+      </div>
+    </div>
+  </section>
+
+  <!-- PROTOTYPE CONSENT NOTICE SCREEN -->
+  <section id="consent-screen" class="consent-screen" aria-labelledby="consent-title">
+    <div class="consent-panel">
+      <p class="consent-eyebrow">Prototype use notice</p>
+      <h1 id="consent-title">Before you continue</h1>
+      <p class="consent-intro">This thesis prototype uses AI to turn study materials into flashcards.</p>
+
+      <div class="consent-details">
+        <section>
+          <h2>Prototype and AI limits</h2>
+          <p>This app uses Groq's free API tier. Generation may be limited, delayed, or temporarily unavailable. AI-generated cards can be incomplete or incorrect, so check them before studying.</p>
+        </section>
+        <section>
+          <h2>Your materials</h2>
+          <p>Notes you paste and images you upload are sent to Groq's API for processing. Do not submit personal, confidential, or sensitive information.</p>
+        </section>
+        <section>
+          <h2>Your choice</h2>
+          <p>Continuing is voluntary. You can decline and leave without using the reviewer.</p>
+        </section>
+      </div>
+
+      <form id="consent-form" class="consent-form">
+        <label class="consent-check-label" for="consent-agree">
+          <input id="consent-agree" type="checkbox" />
+          <span>I have read this notice and agree to continue.</span>
+        </label>
+        <p id="consent-declined-message" class="consent-declined-message hidden" role="status">You chose not to continue. Close this page to leave the prototype.</p>
+        <div class="consent-actions">
+          <button id="consent-decline" class="ghost" type="button">Decline</button>
+          <button id="consent-continue" class="primary-btn" type="submit" disabled>Continue</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand" id="nav-brand-btn" style="cursor: pointer;">
+        <img src="logo.jpg" alt="San Antonio de Padua College Logo" class="logo" onerror="this.src='https://sapc.edu.ph/favicon.ico'; this.onerror=null;" />
+        <div class="brand-text">
+          <span class="school">San Antonio de Padua College</span>
+          <span class="app-title">AI Academic Reviewer</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <div id="user-profile" class="user-profile hidden">
+          <img id="user-avatar-img" class="user-avatar-img hidden" alt="Google Profile Picture" />
+          <span class="user-avatar" id="user-avatar">P</span>
+          <span id="user-name-display" class="user-name">Paduan</span>
+          <button id="logout-btn" class="logout-btn" type="button" title="Log Out">Log Out</button>
+        </div>
+
+        <button id="nav-launch-btn" class="nav-accent-btn">Launch Reviewer →</button>
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <span id="theme-label" class="btn-text">Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE 1: PRIMARY LANDING WEBPAGE VIEW -->
+  <div id="landing-view" class="landing-container">
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span class="badge-dot"></span> Official A.I. Driven Academic Tool That Generates Flashcards for Senior High School Students.
+      </div>
+      <h1 class="hero-title">Magandang araw! <span class="text-gradient">Paduans</span></h1>
+      <p class="hero-subtitle">
+        Transform your lesson notes, LDS, Concept Notes, Personal Notes, and review materials into interactive flashcard decks powered by high-speed AI. Built for Senior High School Paduans.
+      </p>
+
+      <div class="hero-cta-group">
+        <button id="hero-start-btn" class="cta-primary-btn">
+          <span>Start Reviewing Now</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12" 5 19 12 12 19"></polyline></svg>
+        </button>
+        <a href="#features-anchor" class="cta-secondary-btn">Explore Features</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">SHS</span>
+          <span class="stat-label">Grade 11 & 12 Tiers</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">5 Strands</span>
+          <span class="stat-label">STEM, ABM, HUMSS & TVL</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">Instant</span>
+          <span class="stat-label">Flashcard Generation</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" id="features-anchor">
+      <div class="section-header">
+        <h2>Designed for Smarter Studying</h2>
+        <p>Everything you need to master your subjects before exams or quizzes.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>AI Flashcard Generation</h3>
+          <p>Paste notes or upload image snapshots of your reviewer to instantly generate tailored multiple choice and identification cards.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>Track-Specific Content</h3>
+          <p>Customized generation tuned specifically for STEM, ABM, HUMSS, TVL-ICT, and TVL-HE academic strands.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>Full Deck Customization</h3>
+          <p>Manually create, edit, or remove cards to tailor your study deck exactly to your preference.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PAGE 2: APPLICATION WORKSPACE VIEW -->
+  <main id="app-view" class="dashboard-layout hidden">
+    <div class="left-column">
+      <section class="panel main-content">
+        <div class="panel-header">
+          <div>
+            <h2>Study Material</h2>
+            <p class="sub">Select subject mode, then paste module text or upload a photo.</p>
+          </div>
+        </div>
+
+        <div class="subject-switcher-container">
+          <label class="subject-label">Subject Mode:</label>
+          <div class="subject-mode-group" id="subject-mode-container">
+            <button type="button" class="subject-btn active" data-subject="general">
+              <span>General Subjects</span>
+            </button>
+            <button type="button" class="subject-btn" data-subject="math">
+              <span>Mathematics</span>
+            </button>
+            <button type="button" class="subject-btn" data-subject="filipino">
+              <span>Filipino</span>
+            </button>
+          </div>
+        </div>
+
+        <textarea id="notes" placeholder="Paste notes or an image here. You can also drop or choose image files below."></textarea>
+
+        <div id="image-previews" class="image-previews hidden" aria-label="Selected image previews"></div>
+        
+        <div class="toolbar-row">
+          <div class="toolbar-left">
+            <label for="image" id="upload-drop-zone" class="upload-btn drop-zone" role="button" tabindex="0" aria-label="Drop image files here or choose files">
+              <span>Drop image files here or choose files</span>
+            </label>
+            <input type="file" id="image" accept="image/*,.heic,.heif,.avif,.tif,.tiff,.svg" multiple style="display: none;" />
+            <span id="file-name" class="file-status" aria-live="polite">No files selected</span>
+          </div>
+
+          <div class="toolbar-right">
+            <!-- VOICE SELECTOR DROPDOWN -->
+            <label class="dropdown-label">Voice:
+              <select id="voice-select" class="compact-select">
+                <option value="">Auto / Default</option>
+              </select>
+            </label>
+            <label class="dropdown-label">Cards:
+              <select id="count" class="compact-select">
+                <option>5</option><option selected>10</option><option>15</option><option>20</option>
+                <option>25</option><option>30</option><option>35</option><option>40</option><option>45</option><option>50</option>
+              </select>
+            </label>
+            <label class="dropdown-label">Difficulty:
+              <select id="difficulty" class="compact-select">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </label>
+            <button id="generate" class="primary-btn">Generate Flashcards</button>
+            <button id="manual-add-btn" class="secondary-btn">+ Custom Card</button>
+          </div>
+        </div>
+        <p id="status"></p>
+      </section>
+
+      <section id="study" class="panel hidden">
+        <div class="study-header">
+          <div class="meta">
+            <span id="counter">Card 0 of 0</span>
+            <div class="progress"><span id="bar"></span></div>
+          </div>
+          <button id="fullscreen-toggle" class="fullscreen-toggle" type="button" aria-pressed="false">Fullscreen</button>
+          <details id="card-actions" class="card-actions">
+            <summary>Card options</summary>
+            <div class="card-actions-menu">
+              <button id="edit-card-btn" class="compact-btn" type="button">Edit card</button>
+              <button id="export-cards-btn" class="compact-btn" type="button">Export JSON</button>
+              <button id="import-cards-btn" class="compact-btn" type="button">Import JSON</button>
+              <button id="delete-card-btn" class="compact-btn danger" type="button">Delete card</button>
+              <button id="clear-all-cards-btn" class="compact-btn danger" type="button">Delete all cards</button>
+            </div>
+          </details>
+        </div>
+
+        <input type="file" id="import-file-input" accept=".json,application/json" class="hidden" />
+
+        <div class="card" id="card">
+          <div class="card-inner">
+            <div class="face front" id="front"></div>
+            <div class="face back" id="back"></div>
+          </div>
+        </div>
+        <div id="typed-answer-entry" class="typed-answer-entry hidden"></div>
+        <p class="hint">Click card or press <kbd>Space</kbd> to flip · <kbd>←</kbd> <kbd>→</kbd> to navigate</p>
+
+        <div class="controls">
+          <button class="ghost" id="prev">← Prev</button>
+          <button class="ghost" id="shuffle">Shuffle</button>
+          <button id="next" class="primary-btn">Next →</button>
+        </div>
+      </section>
+    </div>
+
+    <aside class="sidebar-panel">
+      <div class="side-card">
+        <h3>Grade Level</h3>
+        <p class="side-sub">Select student deployment tier:</p>
+        <div class="selection-grid" id="grade-container">
+          <button type="button" class="selector-badge active" data-value="Grade 11" aria-pressed="true">Grade 11</button>
+          <button type="button" class="selector-badge" data-value="Grade 12" aria-pressed="false">Grade 12</button>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <h3>Academic Strand</h3>
+        <p class="side-sub">Target testing focus for reviewer:</p>
+        <div class="selection-grid" id="strand-container">
+          <button type="button" class="selector-badge active" data-value="STEM" aria-pressed="true">STEM</button>
+          <button type="button" class="selector-badge" data-value="ABM" aria-pressed="false">ABM</button>
+          <button type="button" class="selector-badge" data-value="HUMSS" aria-pressed="false">HUMSS</button>
+          <button type="button" class="selector-badge" data-value="TVL-ICT" aria-pressed="false">TVL-ICT</button>
+          <button type="button" class="selector-badge" data-value="TVL-HE" aria-pressed="false">TVL-HE</button>
+        </div>
+        <p id="selection-summary" class="selection-summary" aria-live="polite">
+          Generating for Grade 11 / STEM (General)
+        </p>
+      </div>
+
+      <div class="side-card info-card">
+        <h3>Reviewer Tips</h3>
+        <ul class="guide-list">
+          <li>Select high-quality voices like Microsoft Natural or Google voices from the toolbar dropdown.</li>
+          <li>Click <kbd>⏪</kbd> to rewind narration to the start, or <kbd>🔊</kbd> to pause and resume.</li>
+          <li>Press <kbd>Space</kbd> to flip cards and arrow keys to navigate.</li>
+        </ul>
+      </div>
+
+      <div class="side-card info-card">
+        <h3>How to Save and Import Flashcards</h3>
+        <ul class="guide-list">
+          <li>Click <kbd>Export JSON</kbd> to download your flashcards as a JSON file.</li>
+          <li>Click <kbd>Import JSON</kbd> and select a saved JSON file to restore flashcards.</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <!-- MODAL DIALOG: FLASHCARD CREATOR / EDITOR -->
+  <div id="card-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Create Flashcard</h3>
+        <button id="close-modal-btn" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label for="modal-card-type">Card type:</label>
+        <select id="modal-card-type">
+          <option value="identification">Identification</option>
+          <option value="multiple-choice">Multiple choice</option>
+          <option value="enumeration">Enumeration</option>
+          <option value="true-false">True or false</option>
+        </select>
+
+        <label for="modal-question">Question / Definition Prompt:</label>
+        <textarea id="modal-question" rows="4" placeholder="Enter question or definition prompt..."></textarea>
+
+        <div class="custom-card-fields" data-card-type="identification">
+          <label for="modal-answer">Answer / Correct Term:</label>
+          <textarea id="modal-answer" rows="3" placeholder="Enter exact answer..."></textarea>
+        </div>
+
+        <div class="custom-card-fields" data-card-type="multiple-choice">
+          <div class="custom-choice-grid">
+            <label for="modal-option-a">Option A<input id="modal-option-a" type="text" /></label>
+            <label for="modal-option-b">Option B<input id="modal-option-b" type="text" /></label>
+            <label for="modal-option-c">Option C<input id="modal-option-c" type="text" /></label>
+            <label for="modal-option-d">Option D<input id="modal-option-d" type="text" /></label>
+          </div>
+          <label for="modal-correct-option">Correct option:</label>
+          <select id="modal-correct-option">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+          <label for="modal-mc-explanation">Explanation (optional):</label>
+          <textarea id="modal-mc-explanation" rows="3" placeholder="Explain why this option is correct..."></textarea>
+        </div>
+
+        <div class="custom-card-fields" data-card-type="enumeration">
+          <label for="modal-enumeration-answer">Expected items, one per line:</label>
+          <textarea id="modal-enumeration-answer" rows="4" placeholder="Enter one expected item per line"></textarea>
+        </div>
+
+        <div class="custom-card-fields" data-card-type="true-false">
+          <label for="modal-true-false-answer">Correct answer:</label>
+          <select id="modal-true-false-answer">
+            <option value="True">True / Tama</option>
+            <option value="False">False / Mali</option>
+          </select>
+          <label for="modal-explanation">Explanation (optional):</label>
+          <textarea id="modal-explanation" rows="3" placeholder="Explain why this statement is true/false or tama/mali..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancel-modal-btn" class="ghost">Cancel</button>
+        <button id="save-card-btn" class="primary-btn">Save Flashcard</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=20261025-v2"></script>
+
+</body>
+</html>
